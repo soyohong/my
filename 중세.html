@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중세 사주 점술관</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MedievalSharp', cursive, serif;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%);
+            color: #f4e4c1;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #3d2817 0%, #2a1810 100%);
+            border: 4px solid #8b6914;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+            padding: 40px;
+            position: relative;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8b6914, #daa520, #8b6914);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #daa520;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1em;
+            color: #c9a961;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #daa520;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #1a0f0a;
+            border: 2px solid #8b6914;
+            border-radius: 8px;
+            color: #f4e4c1;
+            font-family: 'MedievalSharp', cursive, serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #daa520;
+            box-shadow: 0 0 15px rgba(218, 165, 32, 0.3);
+        }
+        
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8b6914 0%, #daa520 100%);
+            border: 3px solid #6b5410;
+            border-radius: 10px;
+            color: #1a0f0a;
+            font-family: 'MedievalSharp', cursive, serif;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(218, 165, 32, 0.4);
+            background: linear-gradient(135deg, #daa520 0%, #8b6914 100%);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(145deg, #1a0f0a 0%, #2c1810 100%);
+            border: 3px solid #8b6914;
+            border-radius: 15px;
+            display: none;
+            animation: resultAppear 0.6s ease-out;
+        }
+        
+        @keyframes resultAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .pillar {
+            background: #2a1810;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #6b5410;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .pillar:hover {
+            transform: translateY(-5px);
+            border-color: #daa520;
+        }
+        
+        .pillar-title {
+            color: #daa520;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .pillar-char {
+            font-size: 2em;
+            margin: 5px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .fortune-text {
+            line-height: 1.8;
+            color: #e4d4b1;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border-left: 4px solid #daa520;
+        }
+        
+        .fortune-title {
+            color: #daa520;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b6914, transparent);
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .time-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .pillars {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .scroll-decoration {
+            text-align: center;
+            font-size: 2em;
+            color: #8b6914;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="scroll-decoration">⚜</div>
+        <h1>🏰 중세 사주 점술관 🏰</h1>
+        <p class="subtitle">고대의 지혜로 그대의 운명을 살펴보리라</p>
+        <div class="divider"></div>
+        
+        <div class="input-group">
+            <label>📜 그대의 이름</label>
+            <input type="text" id="name" placeholder="이름을 입력하시오">
+        </div>
+        
+        <div class="input-group">
+            <label>⚔️ 성별</label>
+            <select id="gender">
+                <option value="">선택하시오</option>
+                <option value="남">남성</option>
+                <option value="여">여성</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label>📅 출생 연월일</label>
+            <input type="date" id="birthdate">
+        </div>
+        
+        <div class="input-group">
+            <label>🕰️ 출생 시각</label>
+            <div class="time-inputs">
+                <input type="number" id="hour" placeholder="시 (0-23)" min="0" max="23">
+                <input type="number" id="minute" placeholder="분 (0-59)" min="0" max="59">
+            </div>
+        </div>
+        
+        <button onclick="calculateSaju()">⚡ 운명을 점치다 ⚡</button>
+        
+        <div class="result" id="result">
+            <div class="scroll-decoration">✨</div>
+            <h2 class="fortune-title">그대의 사주팔자</h2>
+            <div class="divider"></div>
+            
+            <div class="pillars" id="pillars"></div>
+            
+            <div class="fortune-text" id="fortune"></div>
+        </div>
+    </div>
+    
+    <script>
+        const heavenlyStems = ['갑', '을', '병', '정', '무', '기', '경', '신', '임', '계'];
+        const earthlyBranches = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해'];
+        const elements = ['木', '木', '火', '火', '土', '土', '金', '金', '水', '水'];
+        const zodiacAnimals = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'];
+        
+        function calculateSaju() {
+            const name = document.getElementById('name').value;
+            const gender = document.getElementById('gender').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const hour = document.getElementById('hour').value;
+            const minute = document.getElementById('minute').value;
+            
+            if (!name || !gender || !birthdate || hour === '' || minute === '') {
+                alert('모든 정보를 입력하시오!');
+                return;
+            }
+            
+            const date = new Date(birthdate);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            // 사주 계산 (간단한 알고리즘)
+            const yearStem = heavenlyStems[(year - 4) % 10];
+            const yearBranch = earthlyBranches[(year - 4) % 12];
+            
+            const monthStem = heavenlyStems[(year * 12 + month) % 10];
+            const monthBranch = earthlyBranches[(month + 1) % 12];
+            
+            const dayStem = heavenlyStems[(year + month + day) % 10];
+            const dayBranch = earthlyBranches[(day - 1) % 12];
+            
+            const hourStem = heavenlyStems[(parseInt(hour) + day) % 10];
+            const hourBranch = earthlyBranches[Math.floor(parseInt(hour) / 2)];
+            
+            // 띠 계산
+            const zodiac = zodiacAnimals[(year - 4) % 12];
+            
+            // 오행 계산
+            const yearElement = elements[(year - 4) % 10];
+            
+            // 결과 표시
+            const pillarsHTML = `
+                <div class="pillar">
+                    <div class="pillar-title">年柱 (년)</div>
+                    <div class="pillar-char">${yearStem}</div>
+                    <div class="pillar-char">${yearBranch}</div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-title">月柱 (월)</div>
+                    <div class="pillar-char">${monthStem}</div>
+                    <div class="pillar-char">${monthBranch}</div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-title">日柱 (일)</div>
+                    <div class="pillar-char">${dayStem}</div>
+                    <div class="pillar-char">${dayBranch}</div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-title">時柱 (시)</div>
+                    <div class="pillar-char">${hourStem}</div>
+                    <div class="pillar-char">${hourBranch}</div>
+                </div>
+            `;
+            
+            const fortune = generateFortune(name, gender, zodiac, yearElement, dayStem);
+            
+            document.getElementById('pillars').innerHTML = pillarsHTML;
+            document.getElementById('fortune').innerHTML = fortune;
+            document.getElementById('result').classList.add('show');
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function generateFortune(name, gender, zodiac, element, dayStem) {
+            const fortunes = {
+                '木': {
+                    personality: '나무처럼 곧게 자라나는 성품을 지니셨도다. 끈기와 성장의 기운이 강하며, 새로운 일을 시작하는 데 능하도다.',
+                    career: '교육, 예술, 상담 분야에서 큰 재능을 발휘하리라. 사람들을 이끄는 지도자의 운명을 타고나셨도다.',
+                    love: '진실한 사랑을 추구하는 그대. 서두르지 말고 천천히 마음을 나누면 좋은 인연을 만나리라.'
+                },
+                '火': {
+                    personality: '불꽃같은 열정을 지닌 그대. 적극적이고 활동적인 성품으로 주변을 밝히는 자도다.',
+                    career: '리더십과 추진력이 뛰어나 사업이나 영업 분야에서 성공하리라. 창의적인 일에서 빛을 발하리라.',
+                    love: '열정적인 사랑을 하는 그대. 상대방을 배려하는 마음을 가지면 행복한 인연이 되리라.'
+                },
+                '土': {
+                    personality: '대지처럼 든든하고 믿음직한 성품을 지녔도다. 중용과 조화를 중시하는 지혜로운 자로다.',
+                    career: '관리, 행정, 부동산 분야에서 안정적인 성공을 거두리라. 신뢰를 바탕으로 한 일에서 빛나리라.',
+                    love: '안정적이고 따뜻한 사랑을 나누리라. 가정을 중시하는 마음으로 행복한 가정을 이루리라.'
+                },
+                '金': {
+                    personality: '금속처럼 단단하고 의지가 강한 성품이로다. 정의롭고 원칙을 중시하는 기사의 마음을 지녔도다.',
+                    career: '법률, 금융, 기술 분야에서 탁월한 능력을 발휘하리라. 전문성을 살린 길에서 성공하리라.',
+                    love: '진지하고 책임감 있는 사랑을 하리라. 신뢰를 쌓으면 평생의 동반자를 만나리라.'
+                },
+                '水': {
+                    personality: '물처럼 유연하고 지혜로운 성품이로다. 변화에 잘 적응하고 통찰력이 뛰어나도다.',
+                    career: '연구, 학문, 예술 분야에서 깊이 있는 성과를 이루리라. 창의적인 사고로 새 길을 열리라.',
+                    love: '감성적이고 섬세한 사랑을 나누리라. 마음의 교감을 중시하면 아름다운 인연이 되리라.'
+                }
+            };
+            
+            const selectedFortune = fortunes[element];
+            
+            return `
+                <p><strong>🎭 그대 ${name}의 운명</strong></p>
+                <p>그대는 ${zodiac}띠로 태어나셨으며, ${element}의 기운을 타고나셨도다.</p>
+                <div class="divider"></div>
+                <p><strong>💫 성품과 재능</strong></p>
+                <p>${selectedFortune.personality}</p>
+                <div class="divider"></div>
+                <p><strong>⚔️ 직업과 재물운</strong></p>
+                <p>${selectedFortune.career}</p>
+                <div class="divider"></div>
+                <p><strong>💖 사랑과 인연</strong></p>
+                <p>${selectedFortune.love}</p>
+                <div class="divider"></div>
+                <p><strong>🔮 점술사의 조언</strong></p>
+                <p>그대의 운명은 별에 쓰여있으나, 진정한 미래는 그대 자신이 만들어가는 것이로다. 
+                용기와 지혜를 잃지 말고 정진하시면, 영광스러운 날들이 그대를 기다리리라. 
+                신의 가호가 함께하기를! ⚜️</p>
+            `;
+        }
+    </script>
+</body>
+</html>
