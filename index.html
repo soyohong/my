@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고등학교 1학년 성과 포트폴리오</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter 폰트 로드 (가독성 높은 모던 폰트) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트를 Inter로 설정하고, 한국어 글꼴을 우선 적용 */
+        body {
+            font-family: 'Inter', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #f7f9fb; /* 라이트 그레이 배경 */
+        }
+        /* 스크롤바 숨기기 (깔끔한 디자인을 위해) */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- 메인 컨테이너 -->
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- 헤더 섹션: 학생 정보 및 소개 -->
+        <header class="text-center py-10 bg-white shadow-lg rounded-xl mb-8">
+            <div class="w-24 h-24 mx-auto mb-4 bg-indigo-200 rounded-full flex items-center justify-center text-4xl font-bold text-indigo-700 border-4 border-indigo-400">
+                나
+            </div>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">
+                고등학교 1학년 성과 포트폴리오
+            </h1>
+            <p class="text-xl text-indigo-600 font-semibold mb-1">
+                홍소요 (Hong soyo)
+            </p>
+            <p class="text-gray-500 max-w-lg mx-auto px-4">
+                새로운 도전을 즐기는 고등학교 1학년 학생입니다. 지난 학기 동안 이룬 학업 및 교외 활동 성과를 소개합니다.
+            </p>
+        </header>
+
+        <!-- 성과 카테고리 탭 (인터랙션 포인트) -->
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-8">
+            <!-- 탭 버튼들: 클릭 시 showCategory 함수 실행 -->
+            <button id="tab-projects" onclick="showCategory('projects')"
+                    class="tab-btn py-3 px-6 rounded-full font-bold transition duration-300 ease-in-out shadow-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-100">
+                개인 프로젝트
+            </button>
+        </div>
+
+        <!-- 성과 내용 표시 영역 -->
+        <main id="achievement-container" class="space-y-6">
+            <!-- JavaScript가 여기에 동적으로 내용을 채웁니다. -->
+            <p id="loading-message" class="text-center text-gray-500 italic">성과 정보를 로드 중입니다...</p>
+        </main>
+
+    </div>
+
+    <!-- 스크립트: 데이터와 인터랙션 로직 -->
+    <script>
+        // 1. 성과 데이터 정의 (한국어로 작성)
+        const achievementsData = {
+            
+           
+            
+            projects: [
+                {
+                    title: "나만의 첫 웹 포트폴리오 제작 (HTML/CSS)",
+                    detail: "기본적인 웹 구조(HTML)와 반응형 디자인(Tailwind CSS)을 독학하여 이 페이지를 직접 제작했습니다.",
+                    icon: "💻",
+                    date: "2025.08"
+                },
+                {
+                    title: "파이썬 기초 프로그래밍 학습",
+                    detail: "Python을 이용한 간단한 데이터 분석 및 게임 만들기 프로젝트 3개 완료. 코딩에 대한 흥미를 높였습니다.",
+                    icon: "🐍",
+                    date: "2025.06 - 2025.08"
+                },
+                {
+                    title: "독서 노트 작성 프로젝트",
+                    detail: "인문학, 과학 등 다양한 분야의 책 10권을 읽고 주요 내용을 요약 및 비평하는 독서 노트를 작성했습니다.",
+                    icon: "📖",
+                    date: "2025.03 - 2025.07"
+                },
+            ]
+        };
+
+        // 2. HTML 컨텐츠 생성 함수
+        function createAchievementCard(item) {
+            return `
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 ease-in-out border-t-4 border-indigo-400 flex flex-col md:flex-row items-start space-y-3 md:space-y-0 md:space-x-6">
+                    <!-- 아이콘 및 날짜 -->
+                    <div class="flex-shrink-0 text-3xl md:text-4xl">
+                        ${item.icon}
+                    </div>
+                    <!-- 내용 -->
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">${item.title}</h3>
+                        <p class="text-gray-600">${item.detail}</p>
+                    </div>
+                    <!-- 날짜/기간 -->
+                    <div class="flex-shrink-0 text-sm font-medium text-indigo-500 bg-indigo-50 p-2 rounded-full px-4">
+                        ${item.date}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 3. 카테고리 전환 및 UI 업데이트 함수
+        function showCategory(category) {
+            const container = document.getElementById('achievement-container');
+            const data = achievementsData[category];
+
+            // 1. 컨테이너 초기화
+            container.innerHTML = '';
+            document.getElementById('loading-message')?.remove();
+
+            // 2. 데이터 기반으로 카드 생성 및 삽입
+            if (data && data.length > 0) {
+                const htmlContent = data.map(createAchievementCard).join('');
+                container.innerHTML = htmlContent;
+            } else {
+                container.innerHTML = `<p class="text-center text-lg text-gray-500 p-8 bg-white rounded-xl shadow-sm">아직 등록된 ${category} 성과가 없습니다. 새로운 도전을 기대합니다!</p>`;
+            }
+
+            // 3. 탭 버튼 스타일 업데이트 (인터랙션 시각화)
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                const isActive = button.id === `tab-${category}`;
+                button.classList.remove('bg-indigo-600', 'text-white', 'hover:bg-indigo-700', 'bg-white', 'text-gray-700', 'border', 'border-gray-300', 'hover:bg-gray-100');
+
+                if (isActive) {
+                    // 활성 탭 스타일
+                    button.classList.add('bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
+                } else {
+                    // 비활성 탭 스타일
+                    button.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300', 'hover:bg-gray-100');
+                }
+            });
+        }
+
+        // 4. 페이지 로드 시 초기 카테고리 표시
+        window.onload = () => {
+            // 기본값으로 '학업 성과' 탭을 표시합니다.
+            showCategory('academic');
+        };
+
+    </script>
+</body>
+</html>
